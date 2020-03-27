@@ -6,15 +6,28 @@ class aslot:
         self.numList = [1,2,3,4,5,6,7,8,9]
 
 class sudokuMap:
-    sudokuForm = [[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()]]
+    #sudokuForm = [[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()]]
+
+    #sudokuForm = [
+    #[aslot() for i in range(9)],
+    #[aslot() for i in range(9)],
+    #[aslot() for i in range(9)],
+    #[aslot() for i in range(9)],
+    #[aslot() for i in range(9)],
+    #[aslot() for i in range(9)],
+    #[aslot() for i in range(9)],
+    #[aslot() for i in range(9)],
+    #[aslot() for i in range(9)]]
+
+    sudokuForm = [ [aslot() for i in range(9)] for j in range(9) ]
 
     initalCall = 0
     fLoop = 0
@@ -39,8 +52,10 @@ class sudokuMap:
             return(0)
         else:
             #print("numOfList is ZERO")
-            for i in range (0,9):
-                if (self.sudokuForm[row][col].numList[i] !=0):
+            #for i in range (0,9):
+            #    if (self.sudokuForm[row][col].numList[i] !=0):
+            for nL in self.sudokuForm[row][col].numList:
+                if(nL != 0):
                     cnt += 1
             return(cnt)
 
