@@ -1,119 +1,276 @@
-import re
-import random
-import os
+import sys
 
-# GLOBAL VARIABLES
-grid_size = 81
+class aslot:
+    def __init__(self):
+        self.fixed = 0
+        self.numList = [1,2,3,4,5,6,7,8,9]
 
-def isFull (grid):
-    return grid.count('.') == 0
+class sudokuMap:
+    sudokuMap = [[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
+    [aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()]]
 
-# can be used more purposefully
-def getTrialCelli(grid):
-  for i in range(grid_size):
-    if grid[i] == '.':
-      print 'trial cell', i
-      return i
+    initalCall = 0
+    fLoop = 0
+    sudokuCheckerLastNum = 0
 
-def isLegal(trialVal, trialCelli, grid):
+    def __init__(self):
+        print(f'you made sudokuMap instance')
 
-  cols = 0
-  for eachSq in range(9):
-    trialSq = [ x+cols for x in range(3) ] + [ x+9+cols for x in range(3) ] + [ x+18+cols for x in range(3) ]
-    cols +=3
-    if cols in [9, 36]:
-      cols +=18
-    if trialCelli in trialSq:
-      for i in trialSq:
-        if grid[i] != '.':
-          if trialVal == int(grid[i]):
-            print 'SQU',
-            return False
+    def print(self):
+        for i in range (0,9):
+            for j in range (0,9):
+                if (self.sudokuMap[i][j].fixed != 0):
+                    sys.stdout.write("%d "% self.sudokuMap[i][j].fixed)
+                else:
+                    sys.stdout.write("- ")
+            sys.stdout.write("\n")
 
-  for eachRow in range(9):
-    trialRow = [ x+(9*eachRow) for x in range (9) ]
-    if trialCelli in trialRow:
-      for i in trialRow:
-        if grid[i] != '.':
-          if trialVal == int(grid[i]):
-            print 'ROW',
-            return False
-
-  for eachCol in range(9):
-    trialCol = [ (9*x)+eachCol for x in range (9) ]
-    if trialCelli in trialCol:
-      for i in trialCol:
-        if grid[i] != '.':
-          if trialVal == int(grid[i]):
-            print 'COL',
-            return False
-  print 'is legal', 'cell',trialCelli, 'set to ', trialVal
-  return True
-
-def setCell(trialVal, trialCelli, grid):
-  grid[trialCelli] = trialVal
-  return grid
-
-def clearCell( trialCelli, grid ):
-  grid[trialCelli] = '.'
-  print 'clear cell', trialCelli
-  return grid
-
-
-def hasSolution (grid):
-  if isFull(grid):
-    print '\nSOLVED'
-    return True
-  else:
-    trialCelli = getTrialCelli(grid)
-    trialVal = 1
-    solution_found = False
-    while ( solution_found != True) and (trialVal < 10):
-      print 'trial valu',trialVal,
-      if isLegal(trialVal, trialCelli, grid):
-        grid = setCell(trialVal, trialCelli, grid)
-        if hasSolution (grid) == True:
-          solution_found = True
-          return True
+    def numOfList(self, row, col):
+        cnt = 0
+        if(self.sudokuMap[row][col].fixed !=0):
+            #print("numOfList not zero")
+            return(0)
         else:
-          clearCell( trialCelli, grid )
-      print '++'
-      trialVal += 1
-  return solution_found
+            #print("numOfList is ZERO")
+            for i in range (0,9):
+                if (self.sudokuMap[row][col].numList[i] !=0):
+                    cnt += 1
+            return(cnt)
 
-def main ():
-  #sampleGrid = ['2', '1', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '3', '1', '.', '.', '.', '.', '9', '4', '.', '.', '.', '.', '7', '8', '2', '5', '.', '.', '4', '.', '.', '.', '.', '.', '.', '6', '.', '.', '.', '.', '.', '1', '.', '.', '.', '.', '8', '2', '.', '.', '.', '7', '.', '.', '9', '.', '.', '.', '.', '.', '.', '.', '.', '3', '1', '.', '4', '.', '.', '.', '.', '.', '.', '.', '3', '8', '.']
-  #sampleGrid = ['.', '.', '3', '.', '2', '.', '6', '.', '.', '9', '.', '.', '3', '.', '5', '.', '.', '1', '.', '.', '1', '8', '.', '6', '4', '.', '.', '.', '.', '8', '1', '.', '2', '9', '.', '.', '7', '.', '.', '.', '.', '.', '.', '.', '8', '.', '.', '6', '7', '.', '8', '2', '.', '.', '.', '.', '2', '6', '.', '9', '5', '.', '.', '8', '.', '.', '2', '.', '3', '.', '.', '9', '.', '.', '5', '.', '1', '.', '3', '.', '.']
-  sampleGrid = ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '4', '6', '2', '9', '5', '1', '8', '1', '9', '6', '3', '5', '8', '2', '7', '4', '4', '7', '3', '8', '9', '2', '6', '5', '1', '6', '8', '.', '.', '3', '1', '.', '4', '.', '.', '.', '.', '.', '.', '.', '3', '8', '.']
-  printGrid(sampleGrid, 0)
-  if hasSolution (sampleGrid):
-    printGrid(sampleGrid, 0)
-  else: print 'NO SOLUTION'
+    def printNumOfList(self):
+        for i in range (0,9):
+            for j in range (0,9):
+                sys.stdout.write("%d "% self.numOfList(i,j))
+            sys.stdout.write("\n")
 
+    def fillNumMap(self, pS):
+        cnt = 0
+        for i in range (0,9):
+            for j in range (0,9):
+                self.sudokuMap[i][j].fixed = pS[cnt]
+                cnt += 1
 
-if __name__ == "__main__":
-    main()
+    def NumOfNoneResolvedSlot(self):
+        result = 0
+        for i in range (0,9):
+            for j in range (0,9):
+                if(self.sudokuMap[i][j].fixed == 0):
+                    result += 1
+        return(result)
 
-def printGrid (grid, add_zeros):
-  i = 0
-  for val in grid:
-    if add_zeros == 1:
-      if int(val) < 10:
-        print '0'+str(val),
-      else:
-        print val,
-    else:
-        print val,
-    i +=1
-    if i in [ (x*9)+3 for x in range(81)] +[ (x*9)+6 for x in range(81)] +[ (x*9)+9 for x in range(81)] :
-        print '|',
-    if add_zeros == 1:
-      if i in [ 27, 54, 81]:
-        print '\n---------+----------+----------+'
-      elif i in [ (x*9) for x in range(81)]:
-        print '\n'
-    else:
-      if i in [ 27, 54, 81]:
-        print '\n------+-------+-------+'
-      elif i in [ (x*9) for x in range(81)]:
-        print '\n'
+    def VerifyNumber(self, row, col):
+        cnt = 0
+        #it's already fixed number
+        if(self.sudokuMap[row][col].fixed !=0):
+            return(self.sudokuMap[row][col].fixed)
+
+        #Check at Horizontal line
+        for i in range(0,9):
+            if(i != col):
+                if(self.sudokuMap[row][i].fixed !=0):
+                    self.sudokuMap[row][col].numList[ self.sudokuMap[row][i].fixed - 1 ] = 0
+
+        #check at Verrical line
+        for i in range(0,9):
+            if(i != row):
+                if(self.sudokuMap[i][col].fixed !=0):
+                    self.sudokuMap[row][col].numList[ self.sudokuMap[i][col].fixed - 1 ] = 0
+
+        #Check at Block
+        blockmap = [[0,0,0,1,1,1,2,2,2],
+        [0,0,0,1,1,1,2,2,2],
+        [0,0,0,1,1,1,2,2,2],
+        [3,3,3,4,4,4,5,5,5],
+        [3,3,3,4,4,4,5,5,5],
+        [3,3,3,4,4,4,5,5,5],
+        [6,6,6,7,7,7,8,8,8],
+        [6,6,6,7,7,7,8,8,8],
+        [6,6,6,7,7,7,8,8,8]]
+
+        checkCnt = 8
+        targetBlock = blockmap[row][col]
+        for i in range (0,9):
+            for j in range (0,9):
+                if(blockmap[i][j] == targetBlock):
+                    if( i != row and j != col):
+                        if(self.sudokuMap[i][j].fixed != 0):
+                            self.sudokuMap[row][col].numList[ self.sudokuMap[i][j].fixed - 1 ] = 0
+                        checkCnt -= 1
+                        if(checkCnt == 0):
+                            break
+
+        #check how many candidate in numList
+        cnt = 0
+        for i in range (0,9):
+            if(self.sudokuMap[row][col].numList[i] !=0):
+                cnt += 1
+                self.sudokuMap[row][col].fixed = self.sudokuMap[row][col].numList[i]
+
+        #cnt = 0 ... ERROR cannot find a number. all number are already there.
+        #cnt = 1 ... find a number
+        #cnt > 1 ... cannot fix because of 2 and more candidate remain. then, reset fixed value.
+        if(cnt > 1):
+            self.sudokuMap[row][col].fixed = 0
+        if(self.sudokuMap[row][col].fixed == 0 and cnt == 0):
+            return (-1)
+        return(self.sudokuMap[row][col].fixed)
+
+    def checkWholeNumMap(self):
+        result = 1
+        for i in range (0,9):
+            for j in range (0,9):
+                result = self.VerifyNumber(i,j)
+                if(result == -1):
+                    return(-1)
+        return(1)
+
+    #count the number of none-resolved slot
+    #when result is ZERO, that's mean resolved all.
+    def NumOfNoneResolvedSlot(self):
+        result = 0
+        for i in range (0,9):
+            for j in range (0,9):
+                if( self.sudokuMap[i][j].fixed == 0):
+                    result += 1
+        return(result)
+    # Check then fill the number in resolved slot
+    # return value
+    #  -1 ... Sudoku Numbering Failure. need try another candidate number.
+    #  0 ... complete
+    #  1-81 ... the number of unresolved slot
+    def sudokuChecker(self):
+        openSlot = -1
+        result = 0
+
+        while (result != -1):
+            result = self.checkWholeNumMap()
+            openSlot = self.NumOfNoneResolvedSlot()
+            if(openSlot == self.sudokuCheckerLastNum):
+                break
+            else:
+                self.sudokuCheckerLastNum = openSlot
+        if (result == -1):
+            return(result)
+        return(openSlot)
+
+    # Capture the snapshot of intrim Sudoku Form
+    # Intrim captured form is used when rollback then try another candidate number.
+    def captureNumMap(self, pNm):
+        for i in range (0, 81):
+            pNm[i] = self.sudokuMap[int(i/9)][int(i%9)].fixed
+
+    # Restore the captured intrim numbers to resume trial when rollback.
+    def restoreNumMap(self, pNm):
+        for i in range (0, 81):
+            if(pNm[i] == 0 and self.sudokuMap[int(i/9)][int(i%9)].fixed != 0):
+                self.sudokuMap[int(i/9)][int(i%9)].fixed = 0
+                self.sudokuMap[int(i/9)][int(i%9)].numList = [1,2,3,4,5,6,7,8,9]
+            elif (self.sudokuMap[int(i/9)][int(i%9)].fixed == 0):
+                self.sudokuMap[int(i/9)][int(i%9)].numList = [1,2,3,4,5,6,7,8,9]
+            elif (pNm[i] != self.sudokuMap[int(i/9)][int(i%9)].fixed):
+                print("ERROR in restoreNumMap")
+
+    def SetFixedValue(self, row, col, TrialNum):
+        self.sudokuMap[row][col].fixed = TrialNum
+
+    def getNextSlotNum(self, slotNo):
+        min = 9
+        minSlotNo = slotNo
+
+        for i in range(0,81):
+            if (self.sudokuMap[int(i/9)][int(i%9)].fixed == 0):
+                if (min > self.numOfList(int(i/9), int(i%9))):
+                    min = self.numOfList(int(i/9), int(i%9))
+                    minSlotNo = i
+        return(minSlotNo)
+
+    def resolveSudoku(self, sN):
+        result = 0
+
+        print('resolve_sudoku %d for slot %d(%d:%d)'% (self.fLoop, sN, int(sN/9), int(sN%9)))
+        self.fLoop += 1
+
+        if (self.initalCall == 0):
+            result = self.sudokuChecker()
+            print("initial sudokuChecker ", result)
+            self.printNumOfList()
+
+            if (result == 0):
+                return(0)
+            self.initalCall = 1
+
+        #find next unresolved slot
+        sN = self.getNextSlotNum(sN)
+
+        #capture a list of possible numbers
+        possibleList = self.sudokuMap[int(sN/9)][int(sN%9)].numList
+        print(possibleList)
+
+        #Loop until try all possible numbers or Resolved
+        capMap = [0]*81
+        self.captureNumMap(capMap)
+
+        for i in range(0,9):
+            if(possibleList[i] == 0):
+                continue
+            self.restoreNumMap(capMap)
+
+            #// set trial number
+            self.SetFixedValue(int(sN/9), int(sN%9), possibleList[i])
+            print('slot %d (%d:%d) try %d'% (sN, int(sN/9), int(sN%9), possibleList[i]) )
+            #// execute sudoku checker
+            result = self.sudokuChecker()
+            #//printf(" RESULT for slot %d at sudokuChecker %d\n", slotNum, result);
+
+            if (result == 0):
+                return(0)
+            #// if Unresolved, then re-store and try next number
+            if (result == -1):
+                continue
+            #// succeed to fill in candidate number. then, try next slot.
+            if (result > 0):
+                ret = 0
+                if (sN < 81):
+                    ret = self.resolveSudoku(self.getNextSlotNum(sN))
+                else:
+                    print("reach slot number > 81")
+                    return(-1)
+
+                if(ret == 0):
+                    return(0)
+                if(ret == -1):
+                    print('Return from nesting resolve_sudoku call i=%d'% i)
+                    continue
+
+        #// Unresolved if un-resolved instead of try all candidates
+        print('Unresolved slot %d - Rollback'% sN);
+        return(-1)
+
+# C++ end
+
+#main
+test09 = [ 0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,2,8,0,
+    3,7,6,4,0,0,0,0,0,
+
+    7,0,0,0,0,1,0,0,0,
+    0,2,0,0,0,0,0,0,0,
+    4,0,0,3,0,0,0,0,6,
+
+    0,1,0,0,2,8,0,0,0,
+    0,0,0,0,0,5,0,0,0,
+    0,0,0,0,0,0,0,0,3]
+
+mySudoku1 = sudokuMap()
+mySudoku1.fillNumMap(test09)
+mySudoku1.print()
+
+mySudoku1.resolveSudoku(0)
+mySudoku1.print()
