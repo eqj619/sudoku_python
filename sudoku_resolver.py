@@ -6,27 +6,6 @@ class aslot:
         self.numList = [1,2,3,4,5,6,7,8,9]
 
 class sudokuMap:
-    #sudokuForm = [[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()],
-    #[aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot(),aslot()]]
-
-    #sudokuForm = [
-    #[aslot() for i in range(9)],
-    #[aslot() for i in range(9)],
-    #[aslot() for i in range(9)],
-    #[aslot() for i in range(9)],
-    #[aslot() for i in range(9)],
-    #[aslot() for i in range(9)],
-    #[aslot() for i in range(9)],
-    #[aslot() for i in range(9)],
-    #[aslot() for i in range(9)]]
-
     sudokuForm = [ [aslot() for i in range(9)] for j in range(9) ]
 
     initalCall = 0
@@ -48,12 +27,8 @@ class sudokuMap:
     def numOfList(self, row, col):
         cnt = 0
         if(self.sudokuForm[row][col].fixed !=0):
-            #print("numOfList not zero")
             return(0)
         else:
-            #print("numOfList is ZERO")
-            #for i in range (0,9):
-            #    if (self.sudokuForm[row][col].numList[i] !=0):
             for nL in self.sudokuForm[row][col].numList:
                 if(nL != 0):
                     cnt += 1
@@ -123,10 +98,10 @@ class sudokuMap:
 
         #check how many candidate in numList
         cnt = 0
-        for i in range (0,9):
-            if(self.sudokuForm[row][col].numList[i] !=0):
+        for nL in self.sudokuForm[row][col].numList:
+            if(nL != 0):
                 cnt += 1
-                self.sudokuForm[row][col].fixed = self.sudokuForm[row][col].numList[i]
+                self.sudokuForm[row][col].fixed = nL
 
         #cnt = 0 ... ERROR cannot find a number. all number are already there.
         #cnt = 1 ... find a number
@@ -175,8 +150,10 @@ class sudokuMap:
             return(result)
         return(openSlot)
 
+    """
     # Capture the snapshot of intrim Sudoku Form
     # Intrim captured form is used when rollback then try another candidate number.
+    """
     def captureNumMap(self, pNm):
         for i in range (0, 81):
             pNm[i] = self.sudokuForm[int(i/9)][int(i%9)].fixed
@@ -239,7 +216,7 @@ class sudokuMap:
 
             #// set trial number
             self.SetFixedValue(int(sN/9), int(sN%9), possibleList[i])
-            #print('slot %d (%d:%d) try %d'% (sN, int(sN/9), int(sN%9), possibleList[i]) )
+            print('slot %d (%d:%d) try %d'% (sN, int(sN/9), int(sN%9), possibleList[i]) )
             #// execute sudoku checker
             result = self.sudokuChecker()
             #//printf(" RESULT for slot %d at sudokuChecker %d\n", slotNum, result);
@@ -269,7 +246,11 @@ class sudokuMap:
         return(-1)
 
 # C++ end
-
+"""
+example:
+python sudoku_resolver.py 020000000000600003074080000000003002080040010600500000000010780500009000000000040
+"""
+#########################################################
 #main
 test09 = [ 0,0,0,0,0,0,0,0,0,
     0,0,0,0,0,0,2,8,0,
@@ -282,6 +263,11 @@ test09 = [ 0,0,0,0,0,0,0,0,0,
     0,1,0,0,2,8,0,0,0,
     0,0,0,0,0,5,0,0,0,
     0,0,0,0,0,0,0,0,3]
+
+args = sys.argv
+if(len(args[1]) == 81 and str.isdecimal(args[1])):
+    for i in range(0,81):
+        test09[i] = int(args[1][i])
 
 mySudoku1 = sudokuMap()
 mySudoku1.fillNumMap(test09)
