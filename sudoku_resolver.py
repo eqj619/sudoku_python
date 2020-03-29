@@ -161,13 +161,9 @@ class sudokuMap:
     # Restore the captured intrim numbers to resume trial when rollback.
     def restoreNumMap(self, pNm):
         for i in range (0, 81):
-            if(pNm[i] == 0 and self.sudokuForm[int(i/9)][int(i%9)].fixed != 0):
-                self.sudokuForm[int(i/9)][int(i%9)].fixed = 0
-                self.sudokuForm[int(i/9)][int(i%9)].numList = [1,2,3,4,5,6,7,8,9]
-            elif (self.sudokuForm[int(i/9)][int(i%9)].fixed == 0):
-                self.sudokuForm[int(i/9)][int(i%9)].numList = [1,2,3,4,5,6,7,8,9]
-            elif (pNm[i] != self.sudokuForm[int(i/9)][int(i%9)].fixed):
-                print("ERROR in restoreNumMap")
+            if(pNm[i] == 0):
+                    self.sudokuForm[int(i/9)][int(i%9)].fixed = 0
+                    self.sudokuForm[int(i/9)][int(i%9)].numList = [1,2,3,4,5,6,7,8,9]
 
     def SetFixedValue(self, row, col, TrialNum):
         self.sudokuForm[row][col].fixed = TrialNum
@@ -245,7 +241,6 @@ class sudokuMap:
         #print('Unresolved slot %d - Rollback'% sN);
         return(-1)
 
-# C++ end
 """
 example:
 python sudoku_resolver.py 020000000000600003074080000000003002080040010600500000000010780500009000000000040
