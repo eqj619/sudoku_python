@@ -14,6 +14,10 @@ class sudokuMap:
 
     def __init__(self):
         print(f'you made sudokuMap instance')
+        for i in range (0,9):
+            for j in range (0,9):
+                self.sudokuForm[i][j].fixed = 0
+                self.sudokuForm[i][j].numList = [1,2,3,4,5,6,7,8,9]
 
     def print(self):
         print(f'print sudoku map')
