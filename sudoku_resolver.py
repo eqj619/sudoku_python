@@ -16,6 +16,7 @@ class sudokuMap:
         print(f'you made sudokuMap instance')
 
     def print(self):
+        print(f'print sudoku map')
         for i in range (0,9):
             for j in range (0,9):
                 if (self.sudokuForm[i][j].fixed != 0):
@@ -182,13 +183,13 @@ class sudokuMap:
     def resolveSudoku(self, sN):
         result = 0
 
-        print('resolve_sudoku %d for slot %d(%d:%d)'% (self.fLoop, sN, int(sN/9), int(sN%9)))
+        #DEBUG print('resolve_sudoku %d for slot %d(%d:%d)'% (self.fLoop, sN, int(sN/9), int(sN%9)))
         self.fLoop += 1
 
         if (self.initalCall == 0):
             result = self.sudokuChecker()
             print("initial sudokuChecker ", result)
-            self.printNumOfList()
+            #DEFBUG self.printNumOfList()
 
             if (result == 0):
                 return(0)
@@ -199,7 +200,7 @@ class sudokuMap:
 
         #capture a list of possible numbers
         possibleList = self.sudokuForm[int(sN/9)][int(sN%9)].numList
-        print(possibleList)
+        #DEBUG print(possibleList)
 
         #Loop until try all possible numbers or Resolved
         capMap = [0]*81
@@ -212,7 +213,7 @@ class sudokuMap:
 
             #// set trial number
             self.SetFixedValue(int(sN/9), int(sN%9), possibleList[i])
-            print('slot %d (%d:%d) try %d'% (sN, int(sN/9), int(sN%9), possibleList[i]) )
+            #DEBUG print('slot %d (%d:%d) try %d'% (sN, int(sN/9), int(sN%9), possibleList[i]) )
             #// execute sudoku checker
             result = self.sudokuChecker()
             #//printf(" RESULT for slot %d at sudokuChecker %d\n", slotNum, result);
@@ -243,30 +244,31 @@ class sudokuMap:
 
 """
 example:
-python sudoku_resolver.py 020000000000600003074080000000003002080040010600500000000010780500009000000000040
+python3 sudoku_resolver.py 020000000000600003074080000000003002080040010600500000000010780500009000000000040
 """
 #########################################################
 #main
-test09 = [ 0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,2,8,0,
-    3,7,6,4,0,0,0,0,0,
+if __name__ == '__main__':
+    test09 = [ 0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,2,8,0,
+        3,7,6,4,0,0,0,0,0,
 
-    7,0,0,0,0,1,0,0,0,
-    0,2,0,0,0,0,0,0,0,
-    4,0,0,3,0,0,0,0,6,
+        7,0,0,0,0,1,0,0,0,
+        0,2,0,0,0,0,0,0,0,
+        4,0,0,3,0,0,0,0,6,
 
-    0,1,0,0,2,8,0,0,0,
-    0,0,0,0,0,5,0,0,0,
-    0,0,0,0,0,0,0,0,3]
+        0,1,0,0,2,8,0,0,0,
+        0,0,0,0,0,5,0,0,0,
+        0,0,0,0,0,0,0,0,3]
 
-args = sys.argv
-if(len(args[1]) == 81 and str.isdecimal(args[1])):
-    for i in range(0,81):
-        test09[i] = int(args[1][i])
+    args = sys.argv
+    if(len(args[1]) == 81 and str.isdecimal(args[1])):
+        for i in range(0,81):
+            test09[i] = int(args[1][i])
 
-mySudoku1 = sudokuMap()
-mySudoku1.fillNumMap(test09)
-mySudoku1.print()
+    mySudoku1 = sudokuMap()
+    mySudoku1.fillNumMap(test09)
+    mySudoku1.print()
 
-mySudoku1.resolveSudoku(0)
-mySudoku1.print()
+    mySudoku1.resolveSudoku(0)
+    mySudoku1.print()
