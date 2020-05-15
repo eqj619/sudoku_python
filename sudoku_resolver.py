@@ -52,6 +52,13 @@ class sudokuMap:
                 self.sudokuForm[i][j].fixed = pS[cnt]
                 cnt += 1
 
+    def getNumMap(self, pS):
+        cnt = 0
+        for i in range (0,9):
+            for j in range (0,9):
+                pS[cnt] = self.sudokuForm[i][j].fixed
+                cnt += 1
+
     def NumOfNoneResolvedSlot(self):
         result = 0
         for i in range (0,9):
@@ -248,12 +255,13 @@ class sudokuMap:
 
 """
 example:
-python3 sudoku_resolver.py 020000000000600003074080000000003002080040010600500000000010780500009000000000040
+python3 sudoku_resolver.py 000000000000000280376400000700001000020000000400300006010028000000005000000000003
 """
 #########################################################
 #main
 if __name__ == '__main__':
-    test09 = [ 0,0,0,0,0,0,0,0,0,
+    test09 = [
+        0,0,0,0,0,0,0,0,0,
         0,0,0,0,0,0,2,8,0,
         3,7,6,4,0,0,0,0,0,
 
@@ -264,6 +272,18 @@ if __name__ == '__main__':
         0,1,0,0,2,8,0,0,0,
         0,0,0,0,0,5,0,0,0,
         0,0,0,0,0,0,0,0,3]
+
+    test09answer = [
+        8,4,2,5,1,9,3,6,7,
+        1,5,9,6,7,3,2,8,4,
+        3,7,6,4,8,2,9,5,1,
+        7,3,5,2,6,1,4,9,8,
+        6,2,1,8,9,4,7,3,5,
+        4,9,8,3,5,7,1,2,6,
+        5,1,3,7,2,8,6,4,9,
+        9,6,4,1,3,5,8,7,2,
+        2,8,7,9,4,6,5,1,3
+        ]
 
     args = sys.argv
     if(len(args[1]) == 81 and str.isdecimal(args[1])):
@@ -276,3 +296,8 @@ if __name__ == '__main__':
 
     mySudoku1.resolveSudoku(0)
     mySudoku1.print()
+    mySudoku1.getNumMap(test09)
+    if (test09answer == test09):
+        print (f'PASSED')
+    else:
+        print(f'FAILED')
