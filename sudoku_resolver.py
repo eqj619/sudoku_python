@@ -1,4 +1,5 @@
 import sys
+from itertools import product
 
 class aslot:
     def __init__(self):
@@ -14,10 +15,9 @@ class sudokuMap:
 
     def __init__(self):
         print(f'you made sudokuMap instance')
-        for i in range (0,9):
-            for j in range (0,9):
-                self.sudokuForm[i][j].fixed = 0
-                self.sudokuForm[i][j].numList = [1,2,3,4,5,6,7,8,9]
+        for (i, j) in product(range(0,9), repeat=2):
+            self.sudokuForm[i][j].fixed = 0
+            self.sudokuForm[i][j].numList = [1,2,3,4,5,6,7,8,9]
 
     def print(self):
         print(f'print sudoku map')
@@ -47,24 +47,21 @@ class sudokuMap:
 
     def fillNumMap(self, pS):
         cnt = 0
-        for i in range (0,9):
-            for j in range (0,9):
-                self.sudokuForm[i][j].fixed = pS[cnt]
-                cnt += 1
+        for (i, j) in product(range(0,9), repeat=2):
+            self.sudokuForm[i][j].fixed = pS[cnt]
+            cnt += 1
 
     def getNumMap(self, pS):
         cnt = 0
-        for i in range (0,9):
-            for j in range (0,9):
-                pS[cnt] = self.sudokuForm[i][j].fixed
-                cnt += 1
+        for (i, j) in product(range(0,9), repeat=2):
+            pS[cnt] = self.sudokuForm[i][j].fixed
+            cnt += 1
 
     def NumOfNoneResolvedSlot(self):
         result = 0
-        for i in range (0,9):
-            for j in range (0,9):
-                if(self.sudokuForm[i][j].fixed == 0):
-                    result += 1
+        for (i, j) in product(range(0,9), repeat=2):
+            if(self.sudokuForm[i][j].fixed == 0):
+                result += 1
         return(result)
 
     def VerifyNumber(self, row, col):
@@ -98,15 +95,14 @@ class sudokuMap:
 
         checkCnt = 8
         targetBlock = blockmap[row][col]
-        for i in range (0,9):
-            for j in range (0,9):
-                if(blockmap[i][j] == targetBlock):
-                    if( i != row and j != col):
-                        if(self.sudokuForm[i][j].fixed != 0):
-                            self.sudokuForm[row][col].numList[ self.sudokuForm[i][j].fixed - 1 ] = 0
-                        checkCnt -= 1
-                        if(checkCnt == 0):
-                            break
+        for (i, j) in product(range(0,9), repeat=2):
+            if(blockmap[i][j] == targetBlock):
+                if( i != row and j != col):
+                    if(self.sudokuForm[i][j].fixed != 0):
+                        self.sudokuForm[row][col].numList[ self.sudokuForm[i][j].fixed - 1 ] = 0
+                    checkCnt -= 1
+                    if(checkCnt == 0):
+                        break
 
         #check how many candidate in numList
         cnt = 0
@@ -126,21 +122,19 @@ class sudokuMap:
 
     def checkWholeNumMap(self):
         result = 1
-        for i in range (0,9):
-            for j in range (0,9):
-                result = self.VerifyNumber(i,j)
-                if(result == -1):
-                    return(-1)
+        for (i, j) in product(range(0,9), repeat=2):
+            result = self.VerifyNumber(i,j)
+            if(result == -1):
+                return(-1)
         return(1)
 
     #count the number of none-resolved slot
     #when result is ZERO, that's mean resolved all.
     def NumOfNoneResolvedSlot(self):
         result = 0
-        for i in range (0,9):
-            for j in range (0,9):
-                if( self.sudokuForm[i][j].fixed == 0):
-                    result += 1
+        for (i, j) in product(range(0,9), repeat=2):
+            if( self.sudokuForm[i][j].fixed == 0):
+                result += 1
         return(result)
     # Check then fill the number in resolved slot
     # return value
@@ -256,6 +250,7 @@ class sudokuMap:
 """
 example:
 time python3 sudoku_resolver.py 020000000000600003074080000000003002080040010600500000000010780500009000000000040
+time python3 sudoku_resolver.py 800000000003600000070090200050007000000045700000100030001000068008500010090000400
 """
 #########################################################
 #main
