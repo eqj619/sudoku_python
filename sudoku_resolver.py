@@ -128,14 +128,6 @@ class sudokuMap:
                 return(-1)
         return(1)
 
-    #count the number of none-resolved slot
-    #when result is ZERO, that's mean resolved all.
-    def NumOfNoneResolvedSlot(self):
-        result = 0
-        for (i, j) in product(range(0,9), repeat=2):
-            if( self.sudokuForm[i][j].fixed == 0):
-                result += 1
-        return(result)
     # Check then fill the number in resolved slot
     # return value
     #  -1 ... Sudoku Numbering Failure. need try another candidate number.
