@@ -42,6 +42,10 @@ class sudokuMap:
             if pS[i]:
                 self._place(i, pS[i])
 
+    def getNumMap(self, pS):
+        for i in range(81):
+            pS[i] = self.cells[i]
+
     def print(self):
         print('print sudoku map')
         for r in range(9):
